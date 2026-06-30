@@ -1,0 +1,9 @@
+.expo/
+.expo-shared/
+node_modules/
+dist/
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.env
+.env.local
