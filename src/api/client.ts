@@ -68,3 +68,7 @@ export function getApiErrorMessage(error: unknown) {
 
   return "Unable to complete the request. Please try again.";
 }
+
+export function isNetworkError(error: unknown) {
+  return isAxiosError(error) && !error.response;
+}

@@ -1,10 +1,13 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, View } from "react-native";
-import { Button, Card, ErrorState, Screen, TextInput } from "../../src/components/ui";
+import { StyleSheet, View } from "react-native";
+import { AppButton, AppCard, AppInput, AppText, ErrorState, FormScreen } from "../../src/components/ui";
 import { getApiErrorMessage } from "../../src/api/client";
 import { AdminWebOnlyLoginError, adminWebOnlyMessage, useAuthStore } from "../../src/stores/auth-store";
 import { colors } from "../../src/theme/colors";
+import { radius } from "../../src/theme/radius";
+import { shadows } from "../../src/theme/shadows";
+import { spacing } from "../../src/theme/spacing";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -44,114 +47,162 @@ export default function LoginScreen() {
   }
 
   return (
-    <Screen contentStyle={styles.content}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.keyboard}
-      >
-        <View style={styles.brand}>
-          <Text style={styles.brandName}>LCMP</Text>
-          <Text style={styles.brandSubtitle}>Language Center Management Platform</Text>
-          <Text style={styles.welcome}>Sign in with your Teacher or Student account.</Text>
+    <FormScreen centered contentStyle={styles.content}>
+      <View style={styles.hero}>
+        <View style={styles.heroTop}>
+          <View style={styles.logo}>
+            <AppText tone="white" variant="h3">LC</AppText>
+          </View>
+          <View style={styles.heroTitle}>
+            <AppText tone="white" variant="h1">LCMP</AppText>
+            <AppText tone="white" variant="caption" style={styles.heroSubtitle}>
+              Language Center Management Platform
+            </AppText>
+          </View>
+        </View>
+        <View style={styles.heroDivider} />
+        <View style={styles.heroCopy}>
+          <AppText tone="white" variant="h2">Welcome back</AppText>
+          <AppText tone="white" style={styles.heroBody}>
+            Sign in with your Teacher or Student account.
+          </AppText>
+        </View>
+        <View style={styles.roleRow}>
+          <View style={styles.rolePill}>
+            <AppText tone="white" variant="caption">Teacher</AppText>
+          </View>
+          <View style={styles.rolePill}>
+            <AppText tone="white" variant="caption">Student</AppText>
+          </View>
+        </View>
+      </View>
+
+      <AppCard style={styles.card}>
+        <View style={styles.cardHeader}>
+          <AppText variant="h2">Sign in</AppText>
+          <AppText tone="muted">Use the same LCMP credentials from your portal access.</AppText>
         </View>
 
-        <Card style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.title}>Mobile portal login</Text>
-            <Text style={styles.subtitle}>Use the same LCMP credentials from your portal access.</Text>
-          </View>
+        {error ? <ErrorState title="Login failed" message={error} /> : null}
 
-          {error ? <ErrorState title="Login failed" message={error} /> : null}
-
-          <View style={styles.form}>
-            <TextInput
-              autoCapitalize="none"
-              autoComplete="email"
-              keyboardType="email-address"
-              label="Email"
-              onChangeText={setEmail}
-              placeholder="teacher@lcmp.local"
-              returnKeyType="next"
-              textContentType="emailAddress"
-              value={email}
-            />
-            <TextInput
-              autoCapitalize="none"
-              label="Password"
-              onChangeText={setPassword}
-              onSubmitEditing={handleSubmit}
-              placeholder="ChangeMe123!"
-              returnKeyType="done"
-              secureTextEntry
-              textContentType="password"
-              value={password}
-            />
-          </View>
-
-          <Button
-            disabled={!canSubmit}
-            label="Sign in"
-            loading={isSubmitting}
-            onPress={handleSubmit}
+        <View style={styles.form}>
+          <AppInput
+            accessibilityLabel="Email"
+            autoCapitalize="none"
+            autoComplete="email"
+            keyboardType="email-address"
+            label="Email"
+            onChangeText={setEmail}
+            placeholder="teacher@lcmp.local"
+            returnKeyType="next"
+            testID="login-email-input"
+            textContentType="emailAddress"
+            value={email}
           />
+          <AppInput
+            accessibilityLabel="Password"
+            autoCapitalize="none"
+            label="Password"
+            onChangeText={setPassword}
+            onSubmitEditing={handleSubmit}
+            placeholder="ChangeMe123!"
+            returnKeyType="done"
+            secureTextEntry
+            testID="login-password-input"
+            textContentType="password"
+            value={password}
+          />
+        </View>
 
-          <Text style={styles.footer}>Admin accounts are available on the web dashboard.</Text>
-        </Card>
-      </KeyboardAvoidingView>
-    </Screen>
+        <AppButton
+          accessibilityLabel="Sign in"
+          disabled={!canSubmit}
+          label="Sign in"
+          loading={isSubmitting}
+          onPress={handleSubmit}
+          style={styles.signInButton}
+          testID="login-submit-button"
+        />
+
+        <AppText align="center" tone="muted" variant="caption">Administrators use the web dashboard.</AppText>
+      </AppCard>
+    </FormScreen>
   );
 }
 
 const styles = StyleSheet.create({
   content: {
+    gap: spacing.lg,
+    paddingVertical: spacing.xxl
+  },
+  hero: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primaryDark,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    gap: spacing.lg,
+    overflow: "hidden",
+    padding: spacing.xl,
+    width: "100%",
+    ...shadows.floating
+  },
+  heroTop: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: spacing.md
+  },
+  logo: {
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.18)",
+    borderColor: "rgba(255, 255, 255, 0.28)",
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    height: 56,
     justifyContent: "center",
-    paddingVertical: 32
+    width: 56
   },
-  keyboard: {
-    gap: 24
+  heroTitle: {
+    flex: 1,
+    gap: spacing.xs
   },
-  brand: {
-    gap: 6
+  heroSubtitle: {
+    color: "#e9ecff"
   },
-  brandName: {
-    color: colors.primary,
-    fontSize: 34,
-    fontWeight: "900",
-    letterSpacing: 0
+  heroDivider: {
+    backgroundColor: "rgba(255, 255, 255, 0.18)",
+    height: 1
   },
-  brandSubtitle: {
-    color: colors.text,
-    fontSize: 18,
-    fontWeight: "800"
+  heroCopy: {
+    gap: spacing.xs
   },
-  welcome: {
-    color: colors.muted,
-    fontSize: 15,
-    lineHeight: 22
+  heroBody: {
+    color: "#eef1ff"
+  },
+  roleRow: {
+    flexDirection: "row",
+    gap: spacing.sm
+  },
+  rolePill: {
+    backgroundColor: "rgba(255, 255, 255, 0.14)",
+    borderColor: "rgba(255, 255, 255, 0.22)",
+    borderRadius: radius.full,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm
   },
   card: {
-    gap: 18
+    gap: spacing.lg,
+    padding: spacing.xl
   },
   cardHeader: {
-    gap: 6
-  },
-  title: {
-    color: colors.text,
-    fontSize: 22,
-    fontWeight: "900"
-  },
-  subtitle: {
-    color: colors.muted,
-    fontSize: 14,
-    lineHeight: 20
+    gap: spacing.xs
   },
   form: {
-    gap: 14
+    gap: spacing.md
   },
-  footer: {
-    color: colors.muted,
-    fontSize: 13,
-    lineHeight: 18,
-    textAlign: "center"
+  signInButton: {
+    backgroundColor: colors.black,
+    borderRadius: radius.lg,
+    minHeight: 54
   }
 });

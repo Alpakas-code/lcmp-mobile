@@ -1,16 +1,31 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { radius } from "../../theme/radius";
+import { shadows } from "../../theme/shadows";
+import { spacing } from "../../theme/spacing";
+import { AppIcon, AppIconName } from "./AppIcon";
+import { AppText } from "./AppText";
+import { Button } from "./Button";
 
 type EmptyStateProps = {
   title: string;
   message?: string;
+  icon?: AppIconName;
+  actionLabel?: string;
+  onAction?: () => void;
 };
 
-export function EmptyState({ title, message }: EmptyStateProps) {
+export function EmptyState({ actionLabel, icon = "document", message, onAction, title }: EmptyStateProps) {
   return (
     <View style={styles.state}>
-      <Text style={styles.title}>{title}</Text>
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+      <View style={styles.icon}>
+        <AppIcon color={colors.primary} name={icon} size={22} />
+      </View>
+      <View style={styles.copy}>
+        <AppText align="center" variant="h3">{title}</AppText>
+        {message ? <AppText align="center" tone="muted">{message}</AppText> : null}
+      </View>
+      {actionLabel && onAction ? <Button label={actionLabel} onPress={onAction} variant="secondary" /> : null}
     </View>
   );
 }
@@ -18,22 +33,23 @@ export function EmptyState({ title, message }: EmptyStateProps) {
 const styles = StyleSheet.create({
   state: {
     alignItems: "center",
-    backgroundColor: colors.card,
+    backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 16,
+    borderRadius: radius.xl,
     borderWidth: 1,
-    padding: 20
+    gap: spacing.md,
+    padding: spacing.xl,
+    ...shadows.card
   },
-  title: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: "800"
+  icon: {
+    alignItems: "center",
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.full,
+    height: 52,
+    justifyContent: "center",
+    width: 52
   },
-  message: {
-    color: colors.muted,
-    fontSize: 14,
-    lineHeight: 20,
-    marginTop: 6,
-    textAlign: "center"
+  copy: {
+    gap: spacing.xs
   }
 });

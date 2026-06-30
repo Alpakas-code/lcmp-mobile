@@ -1,5 +1,8 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { radius } from "../../theme/radius";
+import { spacing } from "../../theme/spacing";
+import { AppText } from "./AppText";
 
 type LoadingStateProps = {
   label?: string;
@@ -8,8 +11,10 @@ type LoadingStateProps = {
 export function LoadingState({ label = "Loading" }: LoadingStateProps) {
   return (
     <View style={styles.state}>
-      <ActivityIndicator color={colors.primary} size="large" />
-      <Text style={styles.text}>{label}</Text>
+      <View style={styles.loader}>
+        <ActivityIndicator color={colors.primary} size="large" />
+      </View>
+      <AppText align="center" tone="muted" variant="bodyStrong">{label}</AppText>
     </View>
   );
 }
@@ -18,12 +23,18 @@ const styles = StyleSheet.create({
   state: {
     alignItems: "center",
     flex: 1,
-    gap: 12,
+    gap: spacing.md,
     justifyContent: "center",
-    padding: 24
+    padding: spacing.xl
   },
-  text: {
-    color: colors.muted,
-    fontSize: 15
+  loader: {
+    alignItems: "center",
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.full,
+    borderWidth: 1,
+    height: 64,
+    justifyContent: "center",
+    width: 64
   }
 });

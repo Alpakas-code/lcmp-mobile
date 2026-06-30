@@ -1,0 +1,19 @@
+appId: ${MAESTRO_APP_ID}
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: login-email-input
+- tapOn:
+    id: login-email-input
+- inputText: student@lcmp.local
+- tapOn:
+    id: login-password-input
+- inputText: ChangeMe123!
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: student-dashboard
+    timeout: 30000

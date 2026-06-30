@@ -28,8 +28,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isHydrating: true,
   hydrate: async () => {
-    const auth = await getStoredAuth();
-    set({ user: auth?.user ?? null, isHydrating: false });
+    try {
+      const auth = await getStoredAuth();
+      set({ user: auth?.user ?? null, isHydrating: false });
+    } catch {
+      await clearStoredAuth();
+      set({ user: null, isHydrating: false });
+    }
   },
   login: async (email, password) => {
     const response = await apiClient.post<ApiEnvelope<AuthPayload>>("/auth/login", {

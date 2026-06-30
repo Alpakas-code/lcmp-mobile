@@ -1,5 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { radius } from "../../theme/radius";
+import { shadows } from "../../theme/shadows";
+import { spacing } from "../../theme/spacing";
+import { AppIcon } from "./AppIcon";
+import { AppText } from "./AppText";
 import { Button } from "./Button";
 
 type ErrorStateProps = {
@@ -12,9 +17,14 @@ type ErrorStateProps = {
 export function ErrorState({ title = "Something went wrong", message, retryLabel = "Try again", onRetry }: ErrorStateProps) {
   return (
     <View style={styles.state}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.message}>{message}</Text>
-      {onRetry ? <Button label={retryLabel} onPress={onRetry} variant="secondary" /> : null}
+      <View style={styles.icon}>
+        <AppIcon color={colors.danger} name="notification" size={22} />
+      </View>
+      <View style={styles.copy}>
+        <AppText tone="danger" variant="h3">{title}</AppText>
+        <AppText tone="danger">{message}</AppText>
+      </View>
+      {onRetry ? <Button label={retryLabel} onPress={onRetry} variant="secondary" style={styles.action} /> : null}
     </View>
   );
 }
@@ -23,19 +33,24 @@ const styles = StyleSheet.create({
   state: {
     backgroundColor: colors.dangerSoft,
     borderColor: "#fecdca",
-    borderRadius: 16,
+    borderRadius: radius.xl,
     borderWidth: 1,
-    gap: 10,
-    padding: 18
+    gap: spacing.md,
+    padding: spacing.lg,
+    ...shadows.soft
   },
-  title: {
-    color: colors.danger,
-    fontSize: 16,
-    fontWeight: "800"
+  icon: {
+    alignItems: "center",
+    backgroundColor: colors.white,
+    borderRadius: radius.full,
+    height: 44,
+    justifyContent: "center",
+    width: 44
   },
-  message: {
-    color: colors.danger,
-    fontSize: 14,
-    lineHeight: 20
+  copy: {
+    gap: spacing.xs
+  },
+  action: {
+    alignSelf: "flex-start"
   }
 });

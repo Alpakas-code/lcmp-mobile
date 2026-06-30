@@ -1,0 +1,20 @@
+appId: ${MAESTRO_APP_ID}
+---
+- runFlow: student-login.yaml
+- tapOn:
+    id: student-courses-tab
+- assertVisible:
+    id: student-courses-screen
+- tapOn:
+    id: student-schedule-tab
+- assertVisible:
+    id: student-schedule-screen
+- tapOn:
+    id: student-exams-tab
+- assertVisible:
+    id: student-exams-screen
+- tapOn:
+    id: student-more-tab
+- tapOn: Attendance
+- assertVisible:
+    id: student-attendance-screen

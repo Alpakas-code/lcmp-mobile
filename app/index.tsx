@@ -15,7 +15,7 @@ export default function RootIndex() {
   if (isHydrating) {
     return (
       <Screen scroll={false}>
-        <LoadingState label="Preparing LCMP Mobile" />
+        <LoadingState label="Preparing LCMP" />
       </Screen>
     );
   }
