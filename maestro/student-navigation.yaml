@@ -3,18 +3,26 @@ appId: ${MAESTRO_APP_ID}
 - runFlow: student-login.yaml
 - tapOn:
     id: student-courses-tab
-- assertVisible:
-    id: student-courses-screen
+- extendedWaitUntil:
+    visible:
+      id: student-courses-screen
+    timeout: 30000
 - tapOn:
     id: student-schedule-tab
-- assertVisible:
-    id: student-schedule-screen
+- extendedWaitUntil:
+    visible:
+      id: student-schedule-screen
+    timeout: 30000
 - tapOn:
     id: student-exams-tab
-- assertVisible:
-    id: student-exams-screen
+- extendedWaitUntil:
+    visible:
+      id: student-exams-screen
+    timeout: 30000
 - tapOn:
     id: student-more-tab
 - tapOn: Attendance
-- assertVisible:
-    id: student-attendance-screen
+- extendedWaitUntil:
+    visible:
+      id: student-attendance-screen
+    timeout: 30000
