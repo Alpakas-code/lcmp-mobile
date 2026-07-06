@@ -12,11 +12,12 @@ type ErrorStateProps = {
   message: string;
   retryLabel?: string;
   onRetry?: () => void;
+  accessibilityLabel?: string;
 };
 
-export function ErrorState({ title = "Something went wrong", message, retryLabel = "Try again", onRetry }: ErrorStateProps) {
+export function ErrorState({ accessibilityLabel, title = "Something went wrong", message, retryLabel = "Try again", onRetry }: ErrorStateProps) {
   return (
-    <View style={styles.state}>
+    <View accessibilityLabel={accessibilityLabel ?? `${title}. ${message}`} accessibilityRole="alert" style={styles.state}>
       <View style={styles.icon}>
         <AppIcon color={colors.danger} name="notification" size={22} />
       </View>
@@ -24,7 +25,7 @@ export function ErrorState({ title = "Something went wrong", message, retryLabel
         <AppText tone="danger" variant="h3">{title}</AppText>
         <AppText tone="danger">{message}</AppText>
       </View>
-      {onRetry ? <Button label={retryLabel} onPress={onRetry} variant="secondary" style={styles.action} /> : null}
+      {onRetry ? <Button accessibilityHint="Retries the failed request." label={retryLabel} onPress={onRetry} variant="secondary" style={styles.action} /> : null}
     </View>
   );
 }

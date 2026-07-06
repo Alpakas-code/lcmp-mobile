@@ -3,6 +3,7 @@ import { clearStoredAuth, getStoredAccessToken } from "./token-storage";
 import type { ApiEnvelope } from "../types/auth";
 
 const fallbackApiUrl = "http://localhost:3000/api/v1";
+let unauthorizedHandler: (() => void) | null = null;
 
 export const apiClient = create({
   baseURL: process.env.EXPO_PUBLIC_API_URL ?? fallbackApiUrl,
@@ -29,6 +30,7 @@ apiClient.interceptors.response.use(
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
       await clearStoredAuth();
+      unauthorizedHandler?.();
     }
 
     return Promise.reject(error);
@@ -47,6 +49,10 @@ export function unwrapResponse<T>(response: AxiosResponse<ApiEnvelope<T> | T>): 
 
 export function getApiErrorMessage(error: unknown) {
   if (isAxiosError(error)) {
+    if (error.response?.status === 401) {
+      return "Your session expired. Please sign in again.";
+    }
+
     const message = error.response?.data?.message;
 
     if (Array.isArray(message)) {
@@ -64,6 +70,10 @@ export function getApiErrorMessage(error: unknown) {
     if (error.code === "ECONNABORTED") {
       return "The request timed out. Check that the LCMP API is running.";
     }
+
+    if (!error.response) {
+      return "The LCMP API is unreachable. Check your connection and pull to retry.";
+    }
   }
 
   return "Unable to complete the request. Please try again.";
@@ -71,4 +81,8 @@ export function getApiErrorMessage(error: unknown) {
 
 export function isNetworkError(error: unknown) {
   return isAxiosError(error) && !error.response;
+}
+
+export function setUnauthorizedHandler(handler: (() => void) | null) {
+  unauthorizedHandler = handler;
 }

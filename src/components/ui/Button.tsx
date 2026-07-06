@@ -8,6 +8,7 @@ type ButtonProps = {
   label: string;
   onPress: () => void;
   accessibilityLabel?: string;
+  accessibilityHint?: string;
   disabled?: boolean;
   loading?: boolean;
   variant?: "primary" | "secondary" | "ghost" | "danger";
@@ -17,6 +18,7 @@ type ButtonProps = {
 };
 
 export function AppButton({
+  accessibilityHint,
   accessibilityLabel,
   icon,
   label,
@@ -32,7 +34,8 @@ export function AppButton({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
+      accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityHint={accessibilityHint}
       accessibilityState={{ disabled: isDisabled, busy: loading }}
       disabled={isDisabled}
       onPress={onPress}

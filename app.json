@@ -9,13 +9,34 @@
     "newArchEnabled": true,
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-document-picker",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow LCMP to select document photos for upload.",
+          "cameraPermission": "Allow LCMP to capture document photos for upload."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow LCMP to unlock your remembered session with Face ID."
+        }
+      ],
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": false
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.lcmp.mobile",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow LCMP to capture document photos for upload.",
+        "NSPhotoLibraryUsageDescription": "Allow LCMP to select document photos for upload.",
+        "NSFaceIDUsageDescription": "Allow LCMP to unlock your remembered session with Face ID."
+      }
     },
     "android": {
       "package": "com.lcmp.mobile",

@@ -63,6 +63,7 @@ export type Certificate = AnyRecord & {
   title?: string;
   status?: string;
   issuedAt?: string;
+  certificateNumber?: string;
   level?: AnyRecord | null;
   group?: AnyRecord | null;
 };
@@ -72,8 +73,12 @@ export type StudentDocument = AnyRecord & {
   documentType?: string;
   status?: string;
   fileName?: string;
+  filePath?: string;
+  mimeType?: string;
+  sizeBytes?: number;
   createdAt?: string;
   verifiedAt?: string | null;
+  rejectionReason?: string | null;
 };
 
 export type StudentProfile = AnyRecord & {
@@ -127,6 +132,33 @@ export type ExamSession = AnyRecord & {
   examTemplate?: AnyRecord | null;
 };
 
+export type QuestionType = "SINGLE_CHOICE" | "MULTIPLE_CHOICE" | "TRUE_FALSE" | "TEXT_ANSWER" | string;
+
+export type AttemptQuestion = AnyRecord & {
+  id: string;
+  orderIndex: number;
+  points?: number | string;
+  question: {
+    id: string;
+    type: QuestionType;
+    prompt: string;
+    choices?: {
+      id: string;
+      label?: string;
+      text: string;
+      orderIndex?: number;
+    }[];
+  };
+};
+
+export type AttemptAnswer = AnyRecord & {
+  id: string;
+  questionId: string;
+  textAnswer?: string | null;
+  trueFalseAnswer?: boolean | null;
+  choiceAnswers?: { choiceId: string }[];
+};
+
 export type ExamAttempt = AnyRecord & {
   id: string;
   status?: string;
@@ -136,4 +168,21 @@ export type ExamAttempt = AnyRecord & {
   retakeAllowed?: boolean | null;
   validatedAt?: string | null;
   examSession?: ExamSession;
+  placementTest?: PlacementTest;
+  selectedQuestions?: AttemptQuestion[];
+  answers?: AttemptAnswer[];
+  fraudCount?: number;
+  warning?: string;
+  rawScore?: number | string | null;
+  percentageScore?: number | string | null;
+  recommendedLevel?: string | null;
+  finalLevel?: string | null;
+  resultMessage?: string | null;
+};
+
+export type SaveAttemptAnswerInput = {
+  questionId: string;
+  choiceIds?: string[];
+  trueFalseAnswer?: boolean;
+  textAnswer?: string;
 };

@@ -6,14 +6,14 @@ import { colors } from "../../../src/theme/colors";
 import { radius } from "../../../src/theme/radius";
 
 const visibleTabs: { name: string; title: string; icon: AppIconName; testID?: string }[] = [
-  { name: "index", title: "Home", icon: "home" },
-  { name: "courses", title: "Courses", icon: "book", testID: "student-courses-tab" },
-  { name: "schedule", title: "Schedule", icon: "calendar", testID: "student-schedule-tab" },
-  { name: "exams", title: "Exams", icon: "school", testID: "student-exams-tab" },
-  { name: "more", title: "More", icon: "grid", testID: "student-more-tab" }
+  { name: "index", title: "Home", icon: "home", testID: "teacher-home-tab" },
+  { name: "groups", title: "Groups", icon: "people", testID: "teacher-groups-tab" },
+  { name: "schedule", title: "Schedule", icon: "calendar", testID: "teacher-schedule-tab" },
+  { name: "attendance", title: "Attendance", icon: "check", testID: "teacher-attendance-tab" },
+  { name: "more", title: "More", icon: "grid", testID: "teacher-more-tab" }
 ];
 
-export default function StudentTabsLayout() {
+export default function TeacherTabsLayout() {
   const insets = useSafeAreaInsets();
 
   return (
@@ -55,12 +55,11 @@ export default function StudentTabsLayout() {
           }}
         />
       ))}
-      <Tabs.Screen name="attendance" options={{ href: null }} />
+      <Tabs.Screen name="participation" options={{ href: null }} />
       <Tabs.Screen name="progress" options={{ href: null }} />
-      <Tabs.Screen name="certificates" options={{ href: null }} />
-      <Tabs.Screen name="documents" options={{ href: null }} />
       <Tabs.Screen name="messages" options={{ href: null }} />
       <Tabs.Screen name="notifications" options={{ href: null }} />
+      <Tabs.Screen name="profile" options={{ href: null }} />
       <Tabs.Screen name="course-room" options={{ href: null }} />
     </Tabs>
   );

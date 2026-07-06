@@ -1,5 +1,7 @@
 import { PropsWithChildren } from "react";
 import {
+  FlatList,
+  FlatListProps,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -115,6 +117,35 @@ export function SafeAreaScreen({ accessibilityLabel, children, contentStyle, tes
 
 export function FormScreen(props: KeyboardAwareScreenProps) {
   return <KeyboardAwareScreen {...props} />;
+}
+
+type ListScreenProps<T> = Omit<FlatListProps<T>, "contentContainerStyle" | "refreshControl"> & {
+  accessibilityLabel?: string;
+  contentStyle?: StyleProp<ViewStyle>;
+  onRefresh?: () => void;
+  refreshing?: boolean;
+  testID?: string;
+};
+
+export function ListScreen<T>({
+  accessibilityLabel,
+  contentStyle,
+  onRefresh,
+  refreshing = false,
+  testID,
+  ...props
+}: ListScreenProps<T>) {
+  return (
+    <SafeAreaView accessibilityLabel={accessibilityLabel} style={styles.screen} testID={testID}>
+      <FlatList
+        keyboardShouldPersistTaps="handled"
+        refreshControl={onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} /> : undefined}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.content, contentStyle]}
+        {...props}
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({

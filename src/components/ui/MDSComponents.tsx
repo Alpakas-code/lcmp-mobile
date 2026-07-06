@@ -62,7 +62,7 @@ type IconButtonProps = {
 
 export function IconButton({ icon, label, onPress }: IconButtonProps) {
   return (
-    <Pressable accessibilityLabel={label} accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.iconButton, pressed ? styles.pressed : null]}>
+    <Pressable accessibilityHint={`Activates ${label}.`} accessibilityLabel={label} accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.iconButton, pressed ? styles.pressed : null]}>
       <AppIcon color={colors.text} name={icon} size={18} />
     </Pressable>
   );
@@ -102,7 +102,7 @@ export function StatCard({ caption, icon, onPress, title, tone = "primary", valu
   );
 
   if (!onPress) return card;
-  return <Pressable onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>{card}</Pressable>;
+  return <Pressable accessibilityLabel={`${title}. ${value}${caption ? `. ${caption}` : ""}`} accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>{card}</Pressable>;
 }
 
 type CourseCardProps = {
@@ -123,7 +123,7 @@ export function CourseCard({ meta, onPress, subtitle, title, tone = "primary" }:
   );
 
   if (!onPress) return card;
-  return <Pressable onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>{card}</Pressable>;
+  return <Pressable accessibilityLabel={`${title}${subtitle ? `. ${subtitle}` : ""}${meta ? `. ${meta}` : ""}`} accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>{card}</Pressable>;
 }
 
 type ScheduleCardProps = {
@@ -149,7 +149,7 @@ export function ScheduleCard({ label, onPress, time, title, tone = "primary" }: 
   if (!onPress) return card;
 
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable accessibilityLabel={`${title}. ${time}${label ? `. ${label}` : ""}`} accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
       {card}
     </Pressable>
   );
@@ -200,7 +200,7 @@ function MDSListCard({ icon = "document", meta, onPress, subtitle, title }: Simp
   if (!onPress) return card;
 
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable accessibilityLabel={`${title}${subtitle ? `. ${subtitle}` : ""}${meta ? `. ${meta}` : ""}`} accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
       {card}
     </Pressable>
   );
@@ -257,8 +257,8 @@ export function ConfirmationDialog({
           <AppText variant="h3">{title}</AppText>
           <AppText tone="muted">{message}</AppText>
           <View style={styles.dialogActions}>
-            <AppButton label={cancelLabel} onPress={onCancel} variant="secondary" style={styles.dialogButton} />
-            <AppButton label={confirmLabel} onPress={onConfirm} style={styles.dialogButton} />
+            <AppButton accessibilityHint="Closes this confirmation dialog." label={cancelLabel} onPress={onCancel} variant="secondary" style={styles.dialogButton} />
+            <AppButton accessibilityHint="Confirms this action." label={confirmLabel} onPress={onConfirm} style={styles.dialogButton} />
           </View>
         </AppCard>
       </View>

@@ -12,6 +12,7 @@ import type {
   ParticipationSummary,
   PlacementTest,
   ProgressReport,
+  SaveAttemptAnswerInput,
   StudentDocument,
   StudentProfile
 } from "./types";
@@ -62,12 +63,48 @@ export function getPlacementAttempts() {
   return getArray<ExamAttempt>("/placement-attempts", { page: 1, limit: 50 });
 }
 
+export function startPlacementTest(id: string) {
+  return apiClient.post(`/placement-tests/${id}/start`).then((response) => unwrapResponse<ExamAttempt>(response));
+}
+
+export function getPlacementAttempt(id: string) {
+  return getValue<ExamAttempt>(`/placement-attempts/${id}`);
+}
+
+export function savePlacementAnswer(id: string, input: SaveAttemptAnswerInput) {
+  return apiClient.post(`/placement-attempts/${id}/answer`, input).then((response) => unwrapResponse<unknown>(response));
+}
+
+export function submitPlacementAttempt(id: string) {
+  return apiClient.post(`/placement-attempts/${id}/submit`).then((response) => unwrapResponse<ExamAttempt>(response));
+}
+
 export function getExamSessions() {
   return getArray<ExamSession>("/exam-sessions", { page: 1, limit: 50 });
 }
 
 export function getExamAttempts() {
   return getArray<ExamAttempt>("/exam-attempts", { page: 1, limit: 50 });
+}
+
+export function startExamSession(id: string) {
+  return apiClient.post(`/exam-sessions/${id}/start`).then((response) => unwrapResponse<ExamAttempt>(response));
+}
+
+export function getExamAttempt(id: string) {
+  return getValue<ExamAttempt>(`/exam-attempts/${id}`);
+}
+
+export function saveExamAnswer(id: string, input: SaveAttemptAnswerInput) {
+  return apiClient.post(`/exam-attempts/${id}/answer`, input).then((response) => unwrapResponse<unknown>(response));
+}
+
+export function submitExamAttempt(id: string) {
+  return apiClient.post(`/exam-attempts/${id}/submit`).then((response) => unwrapResponse<ExamAttempt>(response));
+}
+
+export function createExamSecurityEvent(input: { attemptId: string; type: string; metadata?: Record<string, unknown> }) {
+  return apiClient.post("/exam-proctoring/security-events", input).then((response) => unwrapResponse<{ attempt?: ExamAttempt; event?: unknown }>(response));
 }
 
 export function getProgressReports() {
@@ -84,6 +121,16 @@ export function getCertificates() {
 
 export function getStudentDocuments() {
   return getArray<StudentDocument>("/students/me/documents");
+}
+
+export function uploadStudentDocument(input: {
+  studentId: string;
+  documentType: string;
+  fileName: string;
+  mimeType: string;
+  contentBase64: string;
+}) {
+  return apiClient.post("/student-documents/upload", input).then((response) => unwrapResponse<StudentDocument>(response));
 }
 
 export function getInboxMessages() {

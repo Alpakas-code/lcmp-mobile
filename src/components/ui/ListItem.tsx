@@ -12,9 +12,11 @@ type ListItemProps = {
   icon?: AppIconName;
   accessory?: ReactNode;
   onPress?: () => void;
+  accessibilityHint?: string;
+  accessibilityLabel?: string;
 };
 
-export function ListItem({ accessory, icon, onPress, subtitle, title }: ListItemProps) {
+export function ListItem({ accessibilityHint, accessibilityLabel, accessory, icon, onPress, subtitle, title }: ListItemProps) {
   const content = (
     <View style={styles.row}>
       {icon ? (
@@ -37,7 +39,13 @@ export function ListItem({ accessory, icon, onPress, subtitle, title }: ListItem
   if (!onPress) return content;
 
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable
+      accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityLabel ?? `${title}${subtitle ? `. ${subtitle}` : ""}`}
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
       {content}
     </Pressable>
   );

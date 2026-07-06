@@ -2,6 +2,8 @@ import { focusManager, QueryClient, QueryClientProvider } from "@tanstack/react-
 import { PropsWithChildren, useEffect } from "react";
 import { AppState } from "react-native";
 import { ThemeProvider } from "../theme/ThemeProvider";
+import { NetworkStatusProvider } from "../native/network-status";
+import { addPushNotificationResponseListener } from "../native/push-notifications";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,9 +26,16 @@ export function AppProviders({ children }: PropsWithChildren) {
     return () => subscription.remove();
   }, []);
 
+  useEffect(() => {
+    const subscription = addPushNotificationResponseListener();
+    return () => subscription.remove();
+  }, []);
+
   return (
     <ThemeProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <NetworkStatusProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </NetworkStatusProvider>
     </ThemeProvider>
   );
 }
